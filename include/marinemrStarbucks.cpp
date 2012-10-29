@@ -1,7 +1,8 @@
 #include "marinemrStarbucks.h"
 #include <vector>
+#include <cmath>
 
-
+// builds the VP-Tree from an array of Entries.
 void marinemrStarbucks::build(Entry* c, int n){
 	VPEntry* current = NULL;
 
@@ -11,6 +12,7 @@ void marinemrStarbucks::build(Entry* c, int n){
 
 	head = new VPEntry(&(list[0]), 0.5);
 	entries.push_back(head);
+	list.erase(list.begin() + 0);
 
 	// start assigning
 	assign(current, list);
@@ -30,30 +32,38 @@ void assign(VPEntry* current, vector<Entry> list){
 			inside.push_back(list[i]);
 		}
 	}
-	VPEntry* insideNodes = new VPEntry[inside.size()];
-	for(int i = 0; i < inside.size(); i++){
-		current->inside == new VPEntry(&inside[i], current->radius / 2.0);
-		assign(current->inside, inside);
-	}
+
+	// assign inside
+	current->inside == new VPEntry(&inside[0], current->radius / 2.0);
+	entries.push_back(*(current->inside)); // add this to entries
+	inside.erase(inside.begin()+5);
+	assign(current->inside, inside);
 
 	// assign outside nodes
 	for(int j = 0; j < list.size() && current->outside == NULL; j++){
-		if(getRadius(&(current->entry), &list[j]) > current->radius){
-			current->outside == new VPEntry(&list[j], current->radius / 2.0);
-			assign(current->outside, outside);
+		if(getRadius(&(current->entry), &list[j]) >= current->radius){
+			inside.push_back(list[j]);
 		}
 	}
+
+	// assign outside
+	current->outside == new VPEntry(&outside[0], current->radius / 2.0);
+	entries.push_back(*(current->outside)); // add this to entries
+	outside.erase(outside.begin()+5);
+	assign(current->outside, outside);
 }
 
+// returns the nearest Entry as a pointer
 Entry* marinemrStarbucks::getNearest(double x, double y){
 	Entry* location = new Entry;
 	location->x = x;
 	location->y = y;
-	location->identifier = "given";
+	location->identifier = "requested point"; // I probably don't need this, but I want to avoid any problems that might crop up
 
 	head->search(location);
 }
 
+// searches through the VPEntry nodes for the nearest one to the specified location
 VPEntry* VPEntry::search(Entry* loc){
 	VPEntry* closest = NULL;
 
@@ -89,4 +99,40 @@ VPEntry* VPEntry::search(Entry* loc){
 	else{
 		return closest;
 	}*/
+}
+
+// returns the distance between Entries a and b
+double getRadius(Entry* a, Entry* b){
+	return sqrt(pow(a->x - b->x, 2) + pow(a->y - b->y, 2));
+}
+
+// constructor for VP-Tree
+marinemrStarbucks::marinemrStarbucks(){
+	head = NULL;
+}
+
+// deconstructor for the VP-Tree
+marinemrStarbucks::~marinemrStarbucks(){
+	for(int i = 0; i < list.size(); i++){
+		delete(entries[i]->inside);
+		delete(entries[i]->outside);
+	}
+}
+
+VPEntry::VPEntry(){
+	radius = 0.5;
+	inside = NULL;
+	outside = NULL;
+
+	entry = *(new Entry);
+	entry.x = 0.0;
+	entry.y = 0.0;
+	entry.identifier = "missingNo.";
+}
+
+VPEntry::VPEntry(Entry* ent, double r){
+	entry = *ent;
+	radius = r;
+	inside = NULL;
+	outside = NULL;
 }

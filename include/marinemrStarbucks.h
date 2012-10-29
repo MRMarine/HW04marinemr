@@ -13,22 +13,22 @@ public:
 };
 
 void assign(VPEntry*, vector<Entry>);
+// this should probably be renamed getDistance, but I've already included quite a few calls to getRadius.
 double getRadius(Entry*, Entry*);
 
 class marinemrStarbucks : public Starbucks {
 public:
 	VPEntry* head;
 	static vector<Entry> list;
-	static vector<VPEntry> entries;
-
+	
 	marinemrStarbucks();
 	~marinemrStarbucks();
-
-	VPEntry* getNearest(VPEntry*, Entry*);
 
 	// Starbucks methods
 	void build(Entry* c, int n);
 	Entry* getNearest(double x, double y);
 
 };
+
+vector<VPEntry> entries;
 
