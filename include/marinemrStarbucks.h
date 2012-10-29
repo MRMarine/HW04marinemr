@@ -7,7 +7,7 @@ public:
 	VPEntry();
 	//~VPEntry();
 	VPEntry(Entry*, double);
-	Entry entry;
+	Entry* entry;
 	double radius;
 	VPEntry* inside;
 	VPEntry* outside;

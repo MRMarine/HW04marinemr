@@ -30,12 +30,13 @@ void marinemrStarbucks::build(Entry* c, int n){
 void marinemrStarbucks::assign(VPEntry* current){
 	//vector<Entry> list = marinemrStarbucks.list;
 	if(list.size() == 0){ return; }
+	try{
 
 	for(int i=0; i<(int)list.size(); i++) {
 		//if(list[i] == current->entry) continue;
 		if(current->inside != NULL && current->outside != NULL) continue;
-		if(current->inside == NULL && getRadius(&(current->entry), &list[i])) {
-			current->inside = new VPEntry(&list[i], getRadius(&(current->entry), &list[i]));
+		if(current->inside == NULL && getRadius((current->entry), &list[i])) {
+			current->inside = new VPEntry(&list[i], getRadius((current->entry), &list[i]));
 			list.erase(list.begin() + i);
 			//list.swap(newArr);
 			//remove(&list,i);
@@ -50,8 +51,8 @@ void marinemrStarbucks::assign(VPEntry* current){
 		if(i < 0){
 			j = 0;
 		}
-		if(current->outside == NULL && getRadius(&(current->entry), &list[j])) {
-			current->outside = new VPEntry(&list[j], getRadius(&(current->entry), &list[j]));
+		if(current->outside == NULL && getRadius((current->entry), &list[j])) {
+			current->outside = new VPEntry(&list[j], getRadius((current->entry), &list[j]));
 			list.erase(list.begin()+ i);
 			//list.swap(newArr);
 			//remove(&list,j);
@@ -62,6 +63,8 @@ void marinemrStarbucks::assign(VPEntry* current){
 			}
 		}
 	}
+	}
+	catch(int e){}
 
 	return;
 }
@@ -73,14 +76,14 @@ Entry* marinemrStarbucks::getNearest(double x, double y){
 	location->y = y;
 	location->identifier = "requested point"; // I probably don't need this, but I want to avoid any problems that might crop up
 
-	return &((head->search(location))->entry);
+	return ((head->search(location))->entry);
 }
 
 // searches through the VPEntry nodes for the nearest one to the specified location
 VPEntry* VPEntry::search(Entry* loc){
 	VPEntry* closest = NULL;
 
-	if(getRadius(&(this->entry), loc) < this->radius && this->inside != NULL){
+	if(getRadius((this->entry), loc) < this->radius && this->inside != NULL){
 		closest = this->inside->search(loc);
 	}
 	else if(this->outside != NULL){
@@ -167,14 +170,14 @@ VPEntry::VPEntry(){
 	inside = NULL;
 	outside = NULL;
 
-	entry = *(new Entry);
-	entry.x = 0.0;
-	entry.y = 0.0;
-	entry.identifier = "missingNo.";
+	entry = (new Entry);
+	entry->x = 0.0;
+	entry->y = 0.0;
+	entry->identifier = "missingNo.";
 }
 
 VPEntry::VPEntry(Entry* ent, double r){
-	entry = *ent;
+	entry = ent;
 	radius = r;
 	inside = NULL;
 	outside = NULL;
