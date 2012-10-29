@@ -40,7 +40,7 @@ void marinemrStarbucks::assign(VPEntry* current){
 			list.erase(list.begin() + i);
 			//list.swap(newArr);
 			//remove(&list,i);
-			assign(current->inside);
+			//assign(current->inside);
 			
 			i--;
 		}
@@ -56,7 +56,7 @@ void marinemrStarbucks::assign(VPEntry* current){
 			list.erase(list.begin()+ i);
 			//list.swap(newArr);
 			//remove(&list,j);
-			assign(current->outside);
+			//assign(current->outside);
 			
 			if(i != 0){
 				i--;
