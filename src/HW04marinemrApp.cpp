@@ -54,9 +54,9 @@ void HW04marinemrApp::setup()
 
 	vpTree = new marinemrStarbucks();
 	console() << "Build() complete" << endl;
-	console() << vpTree->list.size() << endl;
+	console() << vpTree->size << endl;
 
-	console() << (vpTree->getNearest(0.0, 0.0))->identifier << endl;
+	console() << (vpTree->getNearest(0.039313081, 0.91628776))->identifier << endl; // Yelm Washington 98597 Safeway-Yelm #1619,0.039313081,0.91628776
 	console() << "GetNearest() complete!" << endl;
 }
 

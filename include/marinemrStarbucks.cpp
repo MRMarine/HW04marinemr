@@ -8,24 +8,46 @@
 
 using namespace std;
 
-vector<VPEntry> entries;
+//vector<VPEntry> entries;
 
 // builds the VP-Tree from an array of Entries.
 void marinemrStarbucks::build(Entry* c, int n){
 
-	for(int i = 0; i < n; i++){
-		list.push_back(c[i]);
+	head = new VPEntry(&c[0], 0.5);
+	size = n;
+
+	for(int i = 1; i < n; i++){
+		insert(&c[i], head, 0.25);
+		//list.push_back(c[i]);
 	}
 
-	head = new VPEntry(&(list[0]), 0.5);
-	entries.push_back(*head);
-	list.erase(list.begin() + 0);
+	
+	//entries.push_back(*head);
+	//list.erase(list.begin() + 0);
 
 
 	// start assigning
-	assign(head);
+	//assign(head);
 }
 
+VPEntry* marinemrStarbucks::insert(Entry* add, VPEntry* r, double d){
+	if(r == NULL){
+		return new VPEntry(add, d/2.0);
+	}
+	if((r->entry) == add){
+		return r;
+	}
+	if(getRadius(add, r->entry) < d){
+		r->inside = insert(add,r->inside, d/2.0);
+	}
+	else{
+		r->outside = insert(add,r->outside, d/2.0);
+	}
+
+	return r;
+}
+
+/*
 // recursively assigns a VPEntry to inside and outside another VPEntry.
 void marinemrStarbucks::assign(VPEntry* current){
 	//vector<Entry> list = marinemrStarbucks.list;
@@ -68,6 +90,7 @@ void marinemrStarbucks::assign(VPEntry* current){
 
 	return;
 }
+*/
 
 // returns the nearest Entry as a pointer
 Entry* marinemrStarbucks::getNearest(double x, double y){
@@ -83,7 +106,9 @@ Entry* marinemrStarbucks::getNearest(double x, double y){
 VPEntry* VPEntry::search(Entry* loc){
 	VPEntry* closest = NULL;
 
-	if(getRadius((this->entry), loc) < this->radius && this->inside != NULL){
+	if(getRadius((this->entry), loc) == 0){return this;}
+
+	if(this->inside != NULL && getRadius((this->entry), loc) < this->radius){
 		closest = this->inside->search(loc);
 	}
 	else if(this->outside != NULL){
@@ -92,6 +117,7 @@ VPEntry* VPEntry::search(Entry* loc){
 	else{
 		return this;
 	}
+
 	/* check this later when everything works
 	if(getRadius(&(this->entry), loc) >= (this->radius / 2.0) && getRadius(&(this->entry), loc) < this->radius && this->outside != NULL && this->inside != NULL){
 		VPEntry* check = this->outside->search(loc);
@@ -103,6 +129,9 @@ VPEntry* VPEntry::search(Entry* loc){
 
 	// return closest
 	if(closest == NULL){
+		return this;
+	}
+	else if(getRadius((this->entry), loc) <= getRadius((closest->entry), loc)){
 		return this;
 	}
 	else{

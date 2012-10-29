@@ -28,13 +28,17 @@ public:
 	VPEntry* head;
 	vector<Entry> list;
 	//Arr list;
+	int size;
 	
 	marinemrStarbucks();
 	~marinemrStarbucks();
 
+	VPEntry* insert(Entry*, VPEntry*, double);
+
 	// Starbucks methods
 	void build(Entry* c, int n);
 	Entry* getNearest(double x, double y);
+
 	void assign(VPEntry*);
 
 };
