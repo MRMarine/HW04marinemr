@@ -31,6 +31,3 @@ public:
 	Entry* getNearest(double x, double y);
 
 };
-
-vector<VPEntry> entries;
-

@@ -4,6 +4,8 @@
 #include <fstream>
 #include <iostream>
 
+vector<VPEntry> entries;
+
 // builds the VP-Tree from an array of Entries.
 void marinemrStarbucks::build(Entry* c, int n){
 	VPEntry* current = NULL;
@@ -118,12 +120,14 @@ marinemrStarbucks::marinemrStarbucks(){
 	vector<Entry> list2;
 	string str;
 	double x, y;
+	char filler;
 
 	// take in file input and save Entries
 	while(in.good()){
 		Entry* e = new Entry;
 		getline(in, str, ',');
 		in >> x;
+		in >> filler;
 		in >> y;
 
 		e->identifier = str;
@@ -139,6 +143,8 @@ marinemrStarbucks::marinemrStarbucks(){
 	for(int i = 0; i < (int)list2.size(); i++){
 		entrie[i] = list2[i];
 	}
+
+	console() << list2.size() << endl;
 
 	// build VP-Tree
 	build(entrie, list2.size());
