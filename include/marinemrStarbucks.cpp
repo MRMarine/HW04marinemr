@@ -3,12 +3,13 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include "cinder/app/AppBasic.h"
+#include "cinder/gl/gl.h"
 
 vector<VPEntry> entries;
 
 // builds the VP-Tree from an array of Entries.
 void marinemrStarbucks::build(Entry* c, int n){
-	VPEntry* current = NULL;
 
 	for(int i = 0; i < n; i++){
 		list.push_back(c[i]);
@@ -18,43 +19,64 @@ void marinemrStarbucks::build(Entry* c, int n){
 	entries.push_back(*head);
 	list.erase(list.begin() + 0);
 
+
 	// start assigning
-	assign(current, list);
+	assign(head);
 }
 
 // recursively assigns a VPEntry to inside and outside another VPEntry.
-void assign(VPEntry* current, vector<Entry> list){
+void marinemrStarbucks::assign(VPEntry* current){
 	//vector<Entry> list = marinemrStarbucks.list;
 	if(list.size() == 0){ return; }
 
-	vector<Entry> inside;
-	vector<Entry> outside;
+	for(int i=0; i<(int)list.size(); i++) {
+		//if(list[i] == current->entry) continue;
+		if(current->inside == NULL && getRadius(&(current->entry), &list[i])) {
+			current->inside = new VPEntry(&list[i], getRadius(&(current->entry), &list[i]));
+			list.erase(list.begin()+i);
+			i--;
+		}
+		if(current->outside == NULL && getRadius(&(current->entry), &list[i])) {
+			current->outside = new VPEntry(&list[i], getRadius(&(current->entry), &list[i]));
+			list.erase(list.begin()+i);
+			i--;
+		}
+	}
 
-	// assign inside nodes
+	/*// assign inside nodes
 	for(int i = 0; i < (int)list.size(); i++){
 		if(getRadius(&(current->entry), &list[i]) < current->radius){
 			inside.push_back(list[i]);
 		}
 	}
 
-	// assign inside
-	current->inside = new VPEntry(&inside[0], current->radius / 2.0);
-	entries.push_back(*(current->inside)); // add this to entries
-	inside.erase(inside.begin()+5);
-	assign(current->inside, inside);
+	if(inside.size() > 0){
+		// assign inside
+		Entry ent = inside[0];
+		current->inside = new VPEntry(&ent, current->radius / 2.0);
+		entries.push_back(*(current->inside)); // add this to entries
+		inside.erase(inside.begin() + 0);
+		assign(current->inside);
+	}
 
+	
 	// assign outside nodes
 	for(int j = 0; j < (int)list.size() && current->outside == NULL; j++){
 		if(getRadius(&(current->entry), &list[j]) >= current->radius){
-			inside.push_back(list[j]);
+			outside.push_back(list[j]);
 		}
 	}
+	
+	if(outside.size() > 0){
+		// assign outside
+		Entry ent = outside[0];
+		current->outside = new VPEntry(&ent, current->radius / 2.0);
+		entries.push_back(*(current->outside)); // add this to entries
+		outside.erase(outside.begin() + 0);
+		assign(current->outside);
+	}*/
 
-	// assign outside
-	current->outside = new VPEntry(&outside[0], current->radius / 2.0);
-	entries.push_back(*(current->outside)); // add this to entries
-	outside.erase(outside.begin()+5);
-	assign(current->outside, outside);
+	return;
 }
 
 // returns the nearest Entry as a pointer
@@ -143,8 +165,6 @@ marinemrStarbucks::marinemrStarbucks(){
 	for(int i = 0; i < (int)list2.size(); i++){
 		entrie[i] = list2[i];
 	}
-
-	console() << list2.size() << endl;
 
 	// build VP-Tree
 	build(entrie, list2.size());

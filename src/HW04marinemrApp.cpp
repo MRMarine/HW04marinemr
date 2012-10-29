@@ -20,7 +20,7 @@ void HW04marinemrApp::setup()
 {
 	console() << "Test" << endl;
 
-	
+	/*
 	ifstream in("Starbucks_2006.csv");
 	vector<Entry> list2;
 	string str;
@@ -51,11 +51,11 @@ void HW04marinemrApp::setup()
 
 
 	console() << list2.size() << endl;
-
+	*/
 	
 
-	//vpTree = new marinemrStarbucks();
-	//console() << "Build() complete" << endl;
+	vpTree = new marinemrStarbucks();
+	console() << "Build() complete" << endl;
 }
 
 void HW04marinemrApp::mouseDown( MouseEvent event )

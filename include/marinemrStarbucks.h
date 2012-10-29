@@ -14,7 +14,6 @@ public:
 	VPEntry* search(Entry*);
 };
 
-void assign(VPEntry*, vector<Entry>);
 // this should probably be renamed getDistance, but I've already included quite a few calls to getRadius.
 double getRadius(Entry*, Entry*);
 
@@ -29,5 +28,6 @@ public:
 	// Starbucks methods
 	void build(Entry* c, int n);
 	Entry* getNearest(double x, double y);
+	void assign(VPEntry*);
 
 };
