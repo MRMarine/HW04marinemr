@@ -1,6 +1,8 @@
 #include "marinemrStarbucks.h"
 #include <vector>
 #include <cmath>
+#include <fstream>
+#include <iostream>
 
 // builds the VP-Tree from an array of Entries.
 void marinemrStarbucks::build(Entry* c, int n){
@@ -11,7 +13,7 @@ void marinemrStarbucks::build(Entry* c, int n){
 	}
 
 	head = new VPEntry(&(list[0]), 0.5);
-	entries.push_back(head);
+	entries.push_back(*head);
 	list.erase(list.begin() + 0);
 
 	// start assigning
@@ -27,27 +29,27 @@ void assign(VPEntry* current, vector<Entry> list){
 	vector<Entry> outside;
 
 	// assign inside nodes
-	for(int i = 0; i < list.size(); i++){
+	for(int i = 0; i < (int)list.size(); i++){
 		if(getRadius(&(current->entry), &list[i]) < current->radius){
 			inside.push_back(list[i]);
 		}
 	}
 
 	// assign inside
-	current->inside == new VPEntry(&inside[0], current->radius / 2.0);
+	current->inside = new VPEntry(&inside[0], current->radius / 2.0);
 	entries.push_back(*(current->inside)); // add this to entries
 	inside.erase(inside.begin()+5);
 	assign(current->inside, inside);
 
 	// assign outside nodes
-	for(int j = 0; j < list.size() && current->outside == NULL; j++){
+	for(int j = 0; j < (int)list.size() && current->outside == NULL; j++){
 		if(getRadius(&(current->entry), &list[j]) >= current->radius){
 			inside.push_back(list[j]);
 		}
 	}
 
 	// assign outside
-	current->outside == new VPEntry(&outside[0], current->radius / 2.0);
+	current->outside = new VPEntry(&outside[0], current->radius / 2.0);
 	entries.push_back(*(current->outside)); // add this to entries
 	outside.erase(outside.begin()+5);
 	assign(current->outside, outside);
@@ -60,7 +62,7 @@ Entry* marinemrStarbucks::getNearest(double x, double y){
 	location->y = y;
 	location->identifier = "requested point"; // I probably don't need this, but I want to avoid any problems that might crop up
 
-	head->search(location);
+	return &((head->search(location))->entry);
 }
 
 // searches through the VPEntry nodes for the nearest one to the specified location
@@ -106,17 +108,45 @@ double getRadius(Entry* a, Entry* b){
 	return sqrt(pow(a->x - b->x, 2) + pow(a->y - b->y, 2));
 }
 
+
+
 // constructor for VP-Tree
 marinemrStarbucks::marinemrStarbucks(){
 	head = NULL;
+
+	ifstream in("Starbucks_2006.csv");
+	vector<Entry> list2;
+	string str;
+	double x, y;
+
+	// take in file input and save Entries
+	while(in.good()){
+		Entry* e = new Entry;
+		getline(in, str, ',');
+		in >> x;
+		in >> y;
+
+		e->identifier = str;
+		e->x = x;
+		e->y = y;
+
+		list2.push_back(*e);
+	}
+
+	// make array for Entries
+	Entry* entrie = new Entry[(int)list2.size()];
+
+	for(int i = 0; i < (int)list2.size(); i++){
+		entrie[i] = list2[i];
+	}
+
+	// build VP-Tree
+	build(entrie, list2.size());
+
 }
 
 // deconstructor for the VP-Tree
 marinemrStarbucks::~marinemrStarbucks(){
-	for(int i = 0; i < list.size(); i++){
-		delete(entries[i]->inside);
-		delete(entries[i]->outside);
-	}
 }
 
 VPEntry::VPEntry(){

@@ -1,4 +1,6 @@
+#pragma once
 #include "Starbucks.h"
+#include <vector>
 
 class VPEntry {
 public:
@@ -19,7 +21,7 @@ double getRadius(Entry*, Entry*);
 class marinemrStarbucks : public Starbucks {
 public:
 	VPEntry* head;
-	static vector<Entry> list;
+	vector<Entry> list;
 	
 	marinemrStarbucks();
 	~marinemrStarbucks();

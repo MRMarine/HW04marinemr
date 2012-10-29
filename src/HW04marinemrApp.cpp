@@ -1,5 +1,6 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
+//#include "marinemrStarbucks.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -11,10 +12,14 @@ class HW04marinemrApp : public AppBasic {
 	void mouseDown( MouseEvent event );	
 	void update();
 	void draw();
+  private:
+	//marinemrStarbucks* vpTree;
 };
 
 void HW04marinemrApp::setup()
 {
+	console() << "Test" << endl;
+	//vpTree = new marinemrStarbucks();
 }
 
 void HW04marinemrApp::mouseDown( MouseEvent event )
