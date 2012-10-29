@@ -34,12 +34,21 @@ void marinemrStarbucks::assign(VPEntry* current){
 		if(current->inside == NULL && getRadius(&(current->entry), &list[i])) {
 			current->inside = new VPEntry(&list[i], getRadius(&(current->entry), &list[i]));
 			list.erase(list.begin()+i);
-			i--;
+			
+			if(i != 0){
+				i--;
+			}
+		}
+		if(list.size() == 0){
+			return;
 		}
 		if(current->outside == NULL && getRadius(&(current->entry), &list[i])) {
 			current->outside = new VPEntry(&list[i], getRadius(&(current->entry), &list[i]));
 			list.erase(list.begin()+i);
-			i--;
+			
+			if(i != 0){
+				i--;
+			}
 		}
 	}
 

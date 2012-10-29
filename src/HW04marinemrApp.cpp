@@ -56,6 +56,9 @@ void HW04marinemrApp::setup()
 
 	vpTree = new marinemrStarbucks();
 	console() << "Build() complete" << endl;
+
+	//vpTree.getNearest(0.0, 0.0);
+	//console() << "GetNearest() complete!" << endl;
 }
 
 void HW04marinemrApp::mouseDown( MouseEvent event )
