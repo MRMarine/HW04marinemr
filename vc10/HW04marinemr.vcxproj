@@ -105,11 +105,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\marinemrStarbucks.cpp" />
-    <ClCompile Include="..\src\Arr.cpp" />
     <ClCompile Include="..\src\HW04marinemrApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Arr.h" />
     <ClInclude Include="..\include\marinemrStarbucks.h" />
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\include\Starbucks.h" />

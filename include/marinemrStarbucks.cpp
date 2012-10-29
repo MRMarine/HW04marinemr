@@ -19,7 +19,7 @@ void marinemrStarbucks::build(Entry* c, int n){
 
 	head = new VPEntry(&(list[0]), 0.5);
 	entries.push_back(*head);
-	list.remove(0);
+	list.erase(list.begin() + 0);
 
 
 	// start assigning
@@ -29,21 +29,21 @@ void marinemrStarbucks::build(Entry* c, int n){
 // recursively assigns a VPEntry to inside and outside another VPEntry.
 void marinemrStarbucks::assign(VPEntry* current){
 	//vector<Entry> list = marinemrStarbucks.list;
-	if(list.length() == 0){ return; }
+	if(list.size() == 0){ return; }
 
-	for(int i=0; i<(int)list.length(); i++) {
+	for(int i=0; i<(int)list.size(); i++) {
 		//if(list[i] == current->entry) continue;
 		if(current->inside != NULL && current->outside != NULL) continue;
 		if(current->inside == NULL && getRadius(&(current->entry), &list[i])) {
 			current->inside = new VPEntry(&list[i], getRadius(&(current->entry), &list[i]));
-			list.remove(i);
+			list.erase(list.begin() + i);
 			//list.swap(newArr);
 			//remove(&list,i);
 			assign(current->inside);
 			
 			i--;
 		}
-		if(list.length() == 0){
+		if(list.size() == 0){
 			return;
 		}
 		int j = i;
@@ -52,7 +52,7 @@ void marinemrStarbucks::assign(VPEntry* current){
 		}
 		if(current->outside == NULL && getRadius(&(current->entry), &list[j])) {
 			current->outside = new VPEntry(&list[j], getRadius(&(current->entry), &list[j]));
-			list.remove(i);
+			list.erase(list.begin()+ i);
 			//list.swap(newArr);
 			//remove(&list,j);
 			assign(current->outside);
@@ -124,7 +124,6 @@ double getRadius(Entry* a, Entry* b){
 // constructor for VP-Tree
 marinemrStarbucks::marinemrStarbucks(){
 	head = NULL;
-	list = *(new Arr());
 
 	ifstream in("Starbucks_2006.csv");
 	vector<Entry> list2;

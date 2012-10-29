@@ -54,7 +54,7 @@ void HW04marinemrApp::setup()
 
 	vpTree = new marinemrStarbucks();
 	console() << "Build() complete" << endl;
-	console() << vpTree->list.length() << endl;
+	console() << vpTree->list.size() << endl;
 
 	console() << (vpTree->getNearest(0.0, 0.0))->identifier << endl;
 	console() << "GetNearest() complete!" << endl;

@@ -1,11 +1,11 @@
 #pragma once
 #include "Starbucks.h"
 #include <vector>
-#include "Arr.h"
 
 class VPEntry {
 public:
 	VPEntry();
+	//~VPEntry();
 	VPEntry(Entry*, double);
 	Entry entry;
 	double radius;
@@ -14,6 +14,7 @@ public:
 
 	VPEntry* search(Entry*);
 };
+
 
 // this should probably be renamed getDistance, but I've already included quite a few calls to getRadius.
 double getRadius(Entry*, Entry*);
