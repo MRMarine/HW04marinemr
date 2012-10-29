@@ -18,7 +18,7 @@ class HW04marinemrApp : public AppBasic {
 
 void HW04marinemrApp::setup()
 {
-	console() << "Test" << endl;
+	console() << "Begin constructor" << endl;
 
 	/*
 	ifstream in("Starbucks_2006.csv");
@@ -49,16 +49,15 @@ void HW04marinemrApp::setup()
 		entrie[i] = list2[i];
 	}
 
-
 	console() << list2.size() << endl;
 	*/
-	
 
 	vpTree = new marinemrStarbucks();
 	console() << "Build() complete" << endl;
+	console() << vpTree->list.length() << endl;
 
-	//vpTree.getNearest(0.0, 0.0);
-	//console() << "GetNearest() complete!" << endl;
+	console() << (vpTree->getNearest(0.0, 0.0))->identifier << endl;
+	console() << "GetNearest() complete!" << endl;
 }
 
 void HW04marinemrApp::mouseDown( MouseEvent event )

@@ -6,6 +6,8 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 
+using namespace std;
+
 vector<VPEntry> entries;
 
 // builds the VP-Tree from an array of Entries.
@@ -17,7 +19,7 @@ void marinemrStarbucks::build(Entry* c, int n){
 
 	head = new VPEntry(&(list[0]), 0.5);
 	entries.push_back(*head);
-	list.erase(list.begin() + 0);
+	list.remove(0);
 
 
 	// start assigning
@@ -27,63 +29,39 @@ void marinemrStarbucks::build(Entry* c, int n){
 // recursively assigns a VPEntry to inside and outside another VPEntry.
 void marinemrStarbucks::assign(VPEntry* current){
 	//vector<Entry> list = marinemrStarbucks.list;
-	if(list.size() == 0){ return; }
+	if(list.length() == 0){ return; }
 
-	for(int i=0; i<(int)list.size(); i++) {
+	for(int i=0; i<(int)list.length(); i++) {
 		//if(list[i] == current->entry) continue;
+		if(current->inside != NULL && current->outside != NULL) continue;
 		if(current->inside == NULL && getRadius(&(current->entry), &list[i])) {
 			current->inside = new VPEntry(&list[i], getRadius(&(current->entry), &list[i]));
-			list.erase(list.begin()+i);
+			list.remove(i);
+			//list.swap(newArr);
+			//remove(&list,i);
+			assign(current->inside);
 			
-			if(i != 0){
-				i--;
-			}
+			i--;
 		}
-		if(list.size() == 0){
+		if(list.length() == 0){
 			return;
 		}
-		if(current->outside == NULL && getRadius(&(current->entry), &list[i])) {
-			current->outside = new VPEntry(&list[i], getRadius(&(current->entry), &list[i]));
-			list.erase(list.begin()+i);
+		int j = i;
+		if(i < 0){
+			j = 0;
+		}
+		if(current->outside == NULL && getRadius(&(current->entry), &list[j])) {
+			current->outside = new VPEntry(&list[j], getRadius(&(current->entry), &list[j]));
+			list.remove(i);
+			//list.swap(newArr);
+			//remove(&list,j);
+			assign(current->outside);
 			
 			if(i != 0){
 				i--;
 			}
 		}
 	}
-
-	/*// assign inside nodes
-	for(int i = 0; i < (int)list.size(); i++){
-		if(getRadius(&(current->entry), &list[i]) < current->radius){
-			inside.push_back(list[i]);
-		}
-	}
-
-	if(inside.size() > 0){
-		// assign inside
-		Entry ent = inside[0];
-		current->inside = new VPEntry(&ent, current->radius / 2.0);
-		entries.push_back(*(current->inside)); // add this to entries
-		inside.erase(inside.begin() + 0);
-		assign(current->inside);
-	}
-
-	
-	// assign outside nodes
-	for(int j = 0; j < (int)list.size() && current->outside == NULL; j++){
-		if(getRadius(&(current->entry), &list[j]) >= current->radius){
-			outside.push_back(list[j]);
-		}
-	}
-	
-	if(outside.size() > 0){
-		// assign outside
-		Entry ent = outside[0];
-		current->outside = new VPEntry(&ent, current->radius / 2.0);
-		entries.push_back(*(current->outside)); // add this to entries
-		outside.erase(outside.begin() + 0);
-		assign(current->outside);
-	}*/
 
 	return;
 }
@@ -146,6 +124,7 @@ double getRadius(Entry* a, Entry* b){
 // constructor for VP-Tree
 marinemrStarbucks::marinemrStarbucks(){
 	head = NULL;
+	list = *(new Arr());
 
 	ifstream in("Starbucks_2006.csv");
 	vector<Entry> list2;
@@ -200,4 +179,18 @@ VPEntry::VPEntry(Entry* ent, double r){
 	radius = r;
 	inside = NULL;
 	outside = NULL;
+}
+
+
+template <class T>
+void remove(vector<Entry>* vect, int x){
+	vector<Entry> newArr;
+
+	for(int i = 0; i < (int)vect->size() - 1; i++){
+		if(i != x){
+			newArr.push_back(vect[i]);
+		}
+	}
+
+	vect->swap(newArr);
 }

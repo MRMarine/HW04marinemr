@@ -1,6 +1,7 @@
 #pragma once
 #include "Starbucks.h"
 #include <vector>
+#include "Arr.h"
 
 class VPEntry {
 public:
@@ -17,10 +18,15 @@ public:
 // this should probably be renamed getDistance, but I've already included quite a few calls to getRadius.
 double getRadius(Entry*, Entry*);
 
+// allows me to remove an Entry without calling deconstructor (which doesn't exist)
+//template <class T>
+void remove(vector<Entry>* vect, int x);
+
 class marinemrStarbucks : public Starbucks {
 public:
 	VPEntry* head;
 	vector<Entry> list;
+	//Arr list;
 	
 	marinemrStarbucks();
 	~marinemrStarbucks();
