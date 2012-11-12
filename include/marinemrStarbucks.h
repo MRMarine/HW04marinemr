@@ -17,10 +17,9 @@ public:
 	uint8_t* color;
 
 	VPEntry* search(Entry*);
-
-	void draw(VPEntry*);
 };
 
+void drawEntry(VPEntry *);
 
 // this should probably be renamed getDistance, but I've already included quite a few calls to getRadius.
 double getRadius(Entry*, Entry*);
@@ -46,4 +45,10 @@ public:
 	Entry* getNearest(double x, double y);
 
 	void assign(VPEntry*);
+};
+
+class Census{
+public:
+	int state, county, track, block, population;
+	double x, y;
 };

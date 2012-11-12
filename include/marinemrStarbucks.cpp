@@ -7,8 +7,6 @@
 #include "cinder/gl/gl.h"
 
 using namespace ci;
-using namespace ci::app;
-using namespace std;
 
 //vector<VPEntry> entries;
 
@@ -153,9 +151,9 @@ VPEntry::VPEntry(){
 	entry->identifier = "missingNo.";
 
 	color = new uint8_t[3];
-	color[0] = rand() % 255;
-	color[1] = rand() % 255;
-	color[2] = rand() % 255;
+	color[0] = 150;
+	color[1] = 0;
+	color[2] = 200;
 }
 
 VPEntry::VPEntry(Entry* ent, double r){
@@ -165,9 +163,9 @@ VPEntry::VPEntry(Entry* ent, double r){
 	outside = NULL;
 
 	color = new uint8_t[3];
-	color[0] = rand() % 255;
-	color[1] = rand() % 255;
-	color[2] = rand() % 255;
+	color[0] = 150;
+	color[1] = 0;
+	color[2] = 200;
 }
 
 
@@ -184,10 +182,18 @@ void remove(vector<Entry>* vect, int x){
 	vect->swap(newArr);
 }
 
-void VPEntry::draw(VPEntry* r){
-		// begin OpenGL drawing
-		gl::color(color[0], color[1], color[2]);
-		// begin OpenGL drawing
-		float x = r->entry->x
-		gl::drawSolidCircle(Vec2f(x,y),radius);
+void drawEntry(VPEntry* r){
+		if(r != NULL){
+			// begin OpenGL drawing
+			gl::color(r->color[0], r->color[1], r->color[2]);
+			
+			// begin OpenGL drawing
+			float x = (float) r->entry->x;
+			float y = (float) r->entry->y;// - (-125))/((-63) - (-125));
+			
+			gl::drawSolidCircle(Vec2f(x,y),0.1f);
+		
+			drawEntry(r->inside);
+			drawEntry(r->outside);
+		}
 }
