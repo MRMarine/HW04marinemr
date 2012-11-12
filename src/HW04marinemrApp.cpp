@@ -3,16 +3,18 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 #include "marinemrStarbucks.h"
+#include "cinder/gl/TextureFont.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
 // fulfills:
-//	A (20 pts)
-//	B (10 pts) // almost
-//	C (20 pts)
+//	A (20 pts) // Shows shape of the US and separates states using census data
+//	B (10 pts) // Draws line to nearest Starbucks
+//	C (20 pts) // drawLines()
 //	F (30 pts) // by concentration of population
+//	H (???) // Display the identifier of the nearest Starbucks in the bottom of the screen.
 
 
 class HW04marinemrApp : public AppBasic {
@@ -31,6 +33,9 @@ class HW04marinemrApp : public AppBasic {
 	int censusSize;
 	static const int height_ = 640;
 	static const int width_ = 1024;
+	
+	// controls whether or not lines are drawn to nearest starbucks
+	static const bool drawLine = false;
 };
 
 void HW04marinemrApp::prepareSettings(Settings* settings){
@@ -105,40 +110,56 @@ void HW04marinemrApp::setup()
 
 void HW04marinemrApp::mouseDown( MouseEvent event )
 {
+	// redraw to clear lines and text
 	// clear out the window
 	gl::clear( Color( 0, 0, 0 ) );
 
 	drawMap();
 
-	//drawLines();
+	if(drawLine){
+		drawLines();
+	}
+	
 	drawEntry(vpTree->head);
 
-	// draw line
-	Entry* entry = vpTree->getNearest(event.getX() / (double)width_, event.getY() / (double)height_);
+	// find nearest Entry to points
+	Entry* entry = vpTree->getNearest(event.getX() / (double)width_, (event.getY()) / (double)height_);
 
+	// draw lines
 	gl::color(1,1,1);
-	gl::drawLine(Vec2f(event.getX(), event.getY()), Vec2f(entry->x * width_, entry->y * height_));
-	gl::color(0,0,0);
-	gl::drawStringCentered("Test!", Vec2f(50,50), ColorA(1,0,1,1), Font("Calibri",32));
+	gl::drawLine(Vec2f(event.getX(), event.getY()), Vec2f(entry->x * width_, (entry->y) * height_));
+
+	// draw text
+	Font mFont = Font( "Arial", 36 );
+	gl::TextureFontRef mTextureFont = gl::TextureFont::create( mFont );
+	mTextureFont->drawStringWrapped( entry->identifier, Rectf(15,height_ - 75,width_,height_) );
 }
 
 void HW04marinemrApp::update()
 {
 }
 
+// draw the program
 void HW04marinemrApp::draw()
 {
+	// Don't do this when you don't need to.  It takes forever as it is
 	if(!done){
 		// clear out the window with black
 		gl::clear( Color( 0, 0, 0 ) );
 
+		// draw Census_2010
 		drawMap();
 
 		done = true;
 		console() << "Draw" << endl;
 
 		// drawLines fulfills option C (20 points)
-		//drawLines();
+		// draw lines to nearest Starbucks
+		if(drawLine){
+			drawLines();
+		}
+
+		// Draw Starbucks locations
 		drawEntry(vpTree->head);
 	}
 }
@@ -182,7 +203,7 @@ void HW04marinemrApp::drawLines(){
 
 		Entry* entry = vpTree->getNearest(census2[i].x, census2[i].y);
 
-		gl::drawLine(Vec2f(census2[i].x * width_, census2[i].y * height_), Vec2f(entry->x * width_, entry->y * height_));
+		gl::drawLine(Vec2f(census2[i].x * width_, census2[i].y * height_), Vec2f(entry->x * width_, (1 - entry->y) * height_));
 	}
 }
 
