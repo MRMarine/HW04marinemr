@@ -53,7 +53,7 @@ Entry* marinemrStarbucks::getNearest(double x, double y){
 VPEntry* VPEntry::search(Entry* loc){
 	VPEntry* closest = NULL;
 
-	if(getRadius((this->entry), loc) == 0){return this;}
+	if(getRadius(this->entry, loc) == 0.0){return this;}
 
 	if(this->inside != NULL && getRadius((this->entry), loc) < this->radius){
 		closest = this->inside->search(loc);
@@ -62,7 +62,7 @@ VPEntry* VPEntry::search(Entry* loc){
 		closest = this->outside->search(loc);
 	}
 	else{
-		return this;
+		closest = this;
 	}
 
 	/* check this later when everything works
@@ -75,6 +75,9 @@ VPEntry* VPEntry::search(Entry* loc){
 	}*/
 
 	// return closest
+	return closest;
+
+	/*
 	if(closest == NULL){
 		return this;
 	}
@@ -83,7 +86,7 @@ VPEntry* VPEntry::search(Entry* loc){
 	}
 	else{
 		return closest;
-	}
+	}*/
 
 	/*if(getRadius(&(this->entry), loc) < getRadius(&(closest->entry), loc)){
 		return this;

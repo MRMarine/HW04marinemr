@@ -123,16 +123,16 @@ void HW04marinemrApp::mouseDown( MouseEvent event )
 	drawEntry(vpTree->head);
 
 	// find nearest Entry to points
-	Entry* entry = vpTree->getNearest(event.getX() / (double)width_, (event.getY()) / (double)height_);
+	Entry* entry = vpTree->getNearest(event.getX() / (double)width_, event.getY() / (double)height_);
 
 	// draw lines
 	gl::color(1,1,1);
-	gl::drawLine(Vec2f(event.getX(), event.getY()), Vec2f(entry->x * width_, (entry->y) * height_));
+	gl::drawLine(Vec2f(event.getX(), event.getY()), Vec2f(entry->x * width_, (1 - entry->y) * height_));
 
 	// draw text
-	Font mFont = Font( "Arial", 36 );
-	gl::TextureFontRef mTextureFont = gl::TextureFont::create( mFont );
-	mTextureFont->drawStringWrapped( entry->identifier, Rectf(15,height_ - 75,width_,height_) );
+	Font font = Font("Arial", 36);
+	gl::TextureFontRef textureFont = gl::TextureFont::create(font);
+	textureFont->drawStringWrapped(entry->identifier, Rectf(15,height_ - 75,width_,height_));
 }
 
 void HW04marinemrApp::update()
