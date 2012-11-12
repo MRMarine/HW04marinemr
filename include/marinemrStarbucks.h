@@ -1,6 +1,8 @@
 #pragma once
 #include "Starbucks.h"
 #include <vector>
+#include "cinder/app/AppBasic.h"
+#include "cinder/gl/gl.h"
 
 class VPEntry {
 public:
@@ -12,7 +14,11 @@ public:
 	VPEntry* inside;
 	VPEntry* outside;
 
+	uint8_t* color;
+
 	VPEntry* search(Entry*);
+
+	void draw(VPEntry*);
 };
 
 
@@ -40,5 +46,4 @@ public:
 	Entry* getNearest(double x, double y);
 
 	void assign(VPEntry*);
-
 };

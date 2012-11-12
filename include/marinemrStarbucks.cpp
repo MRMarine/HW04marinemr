@@ -6,6 +6,8 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 
+using namespace ci;
+using namespace ci::app;
 using namespace std;
 
 //vector<VPEntry> entries;
@@ -18,16 +20,7 @@ void marinemrStarbucks::build(Entry* c, int n){
 
 	for(int i = 1; i < n; i++){
 		insert(&c[i], head, 0.25);
-		//list.push_back(c[i]);
 	}
-
-	
-	//entries.push_back(*head);
-	//list.erase(list.begin() + 0);
-
-
-	// start assigning
-	//assign(head);
 }
 
 VPEntry* marinemrStarbucks::insert(Entry* add, VPEntry* r, double d){
@@ -46,51 +39,6 @@ VPEntry* marinemrStarbucks::insert(Entry* add, VPEntry* r, double d){
 
 	return r;
 }
-
-/*
-// recursively assigns a VPEntry to inside and outside another VPEntry.
-void marinemrStarbucks::assign(VPEntry* current){
-	//vector<Entry> list = marinemrStarbucks.list;
-	if(list.size() == 0){ return; }
-	try{
-
-	for(int i=0; i<(int)list.size(); i++) {
-		//if(list[i] == current->entry) continue;
-		if(current->inside != NULL && current->outside != NULL) continue;
-		if(current->inside == NULL && getRadius((current->entry), &list[i])) {
-			current->inside = new VPEntry(&list[i], getRadius((current->entry), &list[i]));
-			list.erase(list.begin() + i);
-			//list.swap(newArr);
-			//remove(&list,i);
-			//assign(current->inside);
-			
-			i--;
-		}
-		if(list.size() == 0){
-			return;
-		}
-		int j = i;
-		if(i < 0){
-			j = 0;
-		}
-		if(current->outside == NULL && getRadius((current->entry), &list[j])) {
-			current->outside = new VPEntry(&list[j], getRadius((current->entry), &list[j]));
-			list.erase(list.begin()+ i);
-			//list.swap(newArr);
-			//remove(&list,j);
-			//assign(current->outside);
-			
-			if(i != 0){
-				i--;
-			}
-		}
-	}
-	}
-	catch(int e){}
-
-	return;
-}
-*/
 
 // returns the nearest Entry as a pointer
 Entry* marinemrStarbucks::getNearest(double x, double y){
@@ -203,6 +151,11 @@ VPEntry::VPEntry(){
 	entry->x = 0.0;
 	entry->y = 0.0;
 	entry->identifier = "missingNo.";
+
+	color = new uint8_t[3];
+	color[0] = rand() % 255;
+	color[1] = rand() % 255;
+	color[2] = rand() % 255;
 }
 
 VPEntry::VPEntry(Entry* ent, double r){
@@ -210,6 +163,11 @@ VPEntry::VPEntry(Entry* ent, double r){
 	radius = r;
 	inside = NULL;
 	outside = NULL;
+
+	color = new uint8_t[3];
+	color[0] = rand() % 255;
+	color[1] = rand() % 255;
+	color[2] = rand() % 255;
 }
 
 
@@ -224,4 +182,12 @@ void remove(vector<Entry>* vect, int x){
 	}
 
 	vect->swap(newArr);
+}
+
+void VPEntry::draw(VPEntry* r){
+		// begin OpenGL drawing
+		gl::color(color[0], color[1], color[2]);
+		// begin OpenGL drawing
+		float x = r->entry->x
+		gl::drawSolidCircle(Vec2f(x,y),radius);
 }
