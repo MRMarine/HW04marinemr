@@ -149,11 +149,6 @@ VPEntry::VPEntry(){
 	entry->x = 0.0;
 	entry->y = 0.0;
 	entry->identifier = "missingNo.";
-
-	color = new uint8_t[3];
-	color[0] = 150;
-	color[1] = 0;
-	color[2] = 200;
 }
 
 VPEntry::VPEntry(Entry* ent, double r){
@@ -161,11 +156,6 @@ VPEntry::VPEntry(Entry* ent, double r){
 	radius = r;
 	inside = NULL;
 	outside = NULL;
-
-	color = new uint8_t[3];
-	color[0] = 150;
-	color[1] = 0;
-	color[2] = 200;
 }
 
 
@@ -185,13 +175,13 @@ void remove(vector<Entry>* vect, int x){
 void drawEntry(VPEntry* r){
 		if(r != NULL){
 			// begin OpenGL drawing
-			gl::color(r->color[0], r->color[1], r->color[2]);
+			gl::color(1, 1, 1);
 			
 			// begin OpenGL drawing
-			float x = (float) r->entry->x;
-			float y = (float) r->entry->y;// - (-125))/((-63) - (-125));
+			double x = r->entry->x * 1024;
+			double y = (1 - r->entry->y) * 640;
 			
-			gl::drawSolidCircle(Vec2f(x,y),0.1f);
+			gl::drawSolidCircle(Vec2f(x,y),4);
 		
 			drawEntry(r->inside);
 			drawEntry(r->outside);

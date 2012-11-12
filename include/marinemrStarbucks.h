@@ -14,8 +14,6 @@ public:
 	VPEntry* inside;
 	VPEntry* outside;
 
-	uint8_t* color;
-
 	VPEntry* search(Entry*);
 };
 

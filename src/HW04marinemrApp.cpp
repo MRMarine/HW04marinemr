@@ -1,3 +1,5 @@
+#pragma once
+
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 #include "marinemrStarbucks.h"
@@ -12,22 +14,27 @@ class HW04marinemrApp : public AppBasic {
 	void mouseDown( MouseEvent event );	
 	void update();
 	void draw();
+	void prepareSettings(Settings*);
   private:
 	marinemrStarbucks* vpTree;
 	bool done;
 	void drawMap();
 	Census* census2;
 	int censusSize;
-	int height_, width_;
+	static const int height_ = 640;
+	static const int width_ = 1024;
 };
+
+void HW04marinemrApp::prepareSettings(Settings* settings){
+	settings->setWindowSize(width_, height_);
+	settings->setResizable(false);
+}
 
 
 
 void HW04marinemrApp::setup()
 {
 	done = false;
-	height_ = 800;
-	width_ = 2.48 * height_;
 
 	console() << "Begin constructor" << endl;
 
@@ -71,6 +78,9 @@ void HW04marinemrApp::setup()
 		c->block = block;
 		c->population = population;
 
+		c->x = x;
+		c->y = 1-y;
+
 		census.push_back(*c);
 	}
 
@@ -105,6 +115,8 @@ void HW04marinemrApp::draw()
 
 		done = true;
 		console() << "Draw" << endl;
+
+		drawEntry(vpTree->head);
 		/*try{
 			drawEntry(vpTree->head);
 		}
@@ -112,28 +124,48 @@ void HW04marinemrApp::draw()
 			console() << "Draw Error" << endl;
 		}
 		*/
-		done = true;
 	}
 }
-
 
 
 void HW04marinemrApp::drawMap(){
 
 	for(int i = 0; i < censusSize; i++){
 
-		if(census2[i].state % 3 == 0){
-			gl::color(255,0,0);
-		}
-		else if(census2[i].state % 3 == 1){
-			gl::color(0,255,0);
-		}
-		else{
-			gl::color(0,0,255);
+		double pop = (0.5 + ((double)census2[i].population) / 2452.0);
+		double pop2 = 0;
+
+		if(pop > 1.0){
+			pop2 = pop-1;
+			if(pop2 > 1.0){
+				pop2 = 1.0;
+			}
+			pop = 1.0;
 		}
 
+		if(census2[i].state % 6 == 0){
+			gl::color(pop,pop2,pop2);
+		}
+		else if(census2[i].state % 6 == 1){
+			gl::color(pop2,pop,pop2);
+		}
+		else if(census2[i].state % 6 == 2){
+			gl::color(pop2,pop2,pop);
+		}
+		else if(census2[i].state % 6 == 3){
+			gl::color(pop,pop,pop2);
+		}
+		else if(census2[i].state % 6 == 4){
+			gl::color(pop2,pop,pop);
+		}
+		else if(census2[i].state % 6 == 5){
+			gl::color(pop2,pop*(150.0/255.0),pop*(250.0/255.0));
+		}
+		else{
+			gl::color(pop,pop2,pop);
+		}
 		
-		gl::drawSolidCircle(Vec2f((float)census2[i].x * width_,(float)census2[i].y * height_),10);
+		gl::drawSolidCircle(Vec2f((float)census2[i].x * width_,(float)census2[i].y * height_),1);
 	}
 }
 
