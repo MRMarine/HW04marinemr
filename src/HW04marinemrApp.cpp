@@ -11,10 +11,10 @@ using namespace std;
 
 // fulfills:
 //	A (20 pts) // Shows shape of the US and separates states using census data
-//	B (10 pts) // Draws line to nearest Starbucks
-//	C (20 pts) // drawLines()
-//	F (30 pts) // by concentration of population
-//	H (???) // Display the identifier of the nearest Starbucks in the bottom of the screen.
+//	B (10 pts) // Draws line to nearest Starbucks when there is a mouseclick
+//	C (20 pts) // drawLines() draws lines to the nearest Starbucks.  Warning, it takes several minutes to load each time
+//	F (30 pts) // intensity of Census data changes by population with more concentrated areas being brighter and more colorful than the darker, black areas with few people.
+//	H (???) // Displays the identifier of the nearest Starbucks in the bottom of the screen.
 
 
 class HW04marinemrApp : public AppBasic {
@@ -49,7 +49,7 @@ void HW04marinemrApp::prepareSettings(Settings* settings){
 void HW04marinemrApp::setup()
 {
 	done = false;
-	drawLine = true;
+	drawLine = false;
 
 	console() << "Begin constructor" << endl;
 
