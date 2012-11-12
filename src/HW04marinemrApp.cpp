@@ -21,6 +21,7 @@ class HW04marinemrApp : public AppBasic {
   public:
 	void setup();
 	void mouseDown( MouseEvent event );	
+	void keyDown(KeyEvent event);
 	void update();
 	void draw();
 	void prepareSettings(Settings*);
@@ -35,7 +36,7 @@ class HW04marinemrApp : public AppBasic {
 	static const int width_ = 1024;
 	
 	// controls whether or not lines are drawn to nearest starbucks
-	static const bool drawLine = false;
+	bool drawLine;
 };
 
 void HW04marinemrApp::prepareSettings(Settings* settings){
@@ -48,6 +49,7 @@ void HW04marinemrApp::prepareSettings(Settings* settings){
 void HW04marinemrApp::setup()
 {
 	done = false;
+	drawLine = true;
 
 	console() << "Begin constructor" << endl;
 
@@ -127,12 +129,30 @@ void HW04marinemrApp::mouseDown( MouseEvent event )
 
 	// draw lines
 	gl::color(1,1,1);
-	gl::drawLine(Vec2f(event.getX(), event.getY()), Vec2f(entry->x * width_, (1 - entry->y) * height_));
+	gl::drawLine(Vec2f(event.getX(), event.getY()), Vec2f(entry->x * width_, entry->y * height_)); // used 1-entry->y earlier
 
 	// draw text
+	// I showed this to another student because she was curios about how this was done
 	Font font = Font("Arial", 36);
 	gl::TextureFontRef textureFont = gl::TextureFont::create(font);
 	textureFont->drawStringWrapped(entry->identifier, Rectf(15,height_ - 75,width_,height_));
+}
+
+void HW04marinemrApp::keyDown(KeyEvent event){
+	// swap drawLine's value
+	drawLine = !drawLine;
+
+	// redraw to clear lines
+	// clear out the window
+	gl::clear( Color( 0, 0, 0 ) );
+
+	drawMap();
+
+	if(drawLine){
+		drawLines();
+	}
+	
+	drawEntry(vpTree->head);
 }
 
 void HW04marinemrApp::update()
@@ -203,7 +223,7 @@ void HW04marinemrApp::drawLines(){
 
 		Entry* entry = vpTree->getNearest(census2[i].x, census2[i].y);
 
-		gl::drawLine(Vec2f(census2[i].x * width_, census2[i].y * height_), Vec2f(entry->x * width_, (1 - entry->y) * height_));
+		gl::drawLine(Vec2f(census2[i].x * width_, census2[i].y * height_), Vec2f(entry->x * width_, entry->y * height_));
 	}
 }
 

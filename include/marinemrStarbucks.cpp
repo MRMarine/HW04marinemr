@@ -53,7 +53,7 @@ Entry* marinemrStarbucks::getNearest(double x, double y){
 VPEntry* VPEntry::search(Entry* loc){
 	VPEntry* closest = NULL;
 
-	if(getRadius(this->entry, loc) == 0.0){return this;}
+	if(getRadius((this->entry), loc) == 0){return this;}
 
 	if(this->inside != NULL && getRadius((this->entry), loc) < this->radius){
 		closest = this->inside->search(loc);
@@ -62,22 +62,11 @@ VPEntry* VPEntry::search(Entry* loc){
 		closest = this->outside->search(loc);
 	}
 	else{
-		closest = this;
+		return this;
 	}
 
-	/* check this later when everything works
-	if(getRadius(&(this->entry), loc) >= (this->radius / 2.0) && getRadius(&(this->entry), loc) < this->radius && this->outside != NULL && this->inside != NULL){
-		VPEntry* check = this->outside->search(loc);
-
-		if(getRadius(&(closest->entry),&(this->entry)) > getRadius(&(check->entry),&(this->entry))){
-			closest = check;
-		}
-	}*/
 
 	// return closest
-	return closest;
-
-	/*
 	if(closest == NULL){
 		return this;
 	}
@@ -86,14 +75,8 @@ VPEntry* VPEntry::search(Entry* loc){
 	}
 	else{
 		return closest;
-	}*/
-
-	/*if(getRadius(&(this->entry), loc) < getRadius(&(closest->entry), loc)){
-		return this;
 	}
-	else{
-		return closest;
-	}*/
+
 }
 
 // returns the distance between Entries a and b
