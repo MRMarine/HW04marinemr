@@ -7,6 +7,7 @@
 #include "cinder/gl/gl.h"
 
 using namespace ci;
+using namespace cinder;
 
 //vector<VPEntry> entries;
 
@@ -175,13 +176,15 @@ void remove(vector<Entry>* vect, int x){
 void drawEntry(VPEntry* r){
 		if(r != NULL){
 			// begin OpenGL drawing
-			gl::color(1, 1, 1);
+			gl::color(1, 1, 1, 0.25);
 			
 			// begin OpenGL drawing
 			double x = r->entry->x * 1024;
 			double y = (1 - r->entry->y) * 640;
 			
-			gl::drawSolidCircle(Vec2f(x,y),4);
+			//gl::drawSolidCircle(Vec2f(x,y),4);
+			//gl::drawString;
+			gl::drawStrokedRect(Rectf(x,y,x+2,y+2));
 		
 			drawEntry(r->inside);
 			drawEntry(r->outside);

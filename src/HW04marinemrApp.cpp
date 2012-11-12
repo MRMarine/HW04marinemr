@@ -8,6 +8,13 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
+// fulfills:
+//	A (20 pts)
+//	B (10 pts) // almost
+//	C (20 pts)
+//	F (30 pts) // by concentration of population
+
+
 class HW04marinemrApp : public AppBasic {
   public:
 	void setup();
@@ -19,6 +26,7 @@ class HW04marinemrApp : public AppBasic {
 	marinemrStarbucks* vpTree;
 	bool done;
 	void drawMap();
+	void drawLines();
 	Census* census2;
 	int censusSize;
 	static const int height_ = 640;
@@ -97,6 +105,21 @@ void HW04marinemrApp::setup()
 
 void HW04marinemrApp::mouseDown( MouseEvent event )
 {
+	// clear out the window
+	gl::clear( Color( 0, 0, 0 ) );
+
+	drawMap();
+
+	//drawLines();
+	drawEntry(vpTree->head);
+
+	// draw line
+	Entry* entry = vpTree->getNearest(event.getX() / (double)width_, event.getY() / (double)height_);
+
+	gl::color(1,1,1);
+	gl::drawLine(Vec2f(event.getX(), event.getY()), Vec2f(entry->x * width_, entry->y * height_));
+	gl::color(0,0,0);
+	gl::drawStringCentered("Test!", Vec2f(50,50), ColorA(1,0,1,1), Font("Calibri",32));
 }
 
 void HW04marinemrApp::update()
@@ -110,29 +133,64 @@ void HW04marinemrApp::draw()
 		gl::clear( Color( 0, 0, 0 ) );
 
 		drawMap();
-		//gl::color(255,255,255);
-		//gl::drawSolidCircle(Vec2f(50,50),10);
 
 		done = true;
 		console() << "Draw" << endl;
 
+		// drawLines fulfills option C (20 points)
+		//drawLines();
 		drawEntry(vpTree->head);
-		/*try{
-			drawEntry(vpTree->head);
-		}
-		catch(Exception e){
-			console() << "Draw Error" << endl;
-		}
-		*/
 	}
 }
 
+
+void HW04marinemrApp::drawLines(){
+	for(int i = 0; i < censusSize; i++){
+
+		double pop = (0.1 + ((double)census2[i].population) / 2452.0);
+		double pop2 = 0;
+
+		if(pop > 1.0){
+			pop2 = pop-1;
+			if(pop2 > 1.0){
+				pop2 = 1.0;
+			}
+			pop = 1.0;
+		}
+
+		if(census2[i].state % 6 == 0){
+			gl::color(pop,pop2,pop2);
+		}
+		else if(census2[i].state % 6 == 1){
+			gl::color(pop2,pop,pop2);
+		}
+		else if(census2[i].state % 6 == 2){
+			gl::color(pop2,pop2,pop);
+		}
+		else if(census2[i].state % 6 == 3){
+			gl::color(pop,pop,pop2);
+		}
+		else if(census2[i].state % 6 == 4){
+			gl::color(pop2,pop,pop);
+		}
+		else if(census2[i].state % 6 == 5){
+			gl::color(pop2,pop*(150.0/255.0),pop*(250.0/255.0));
+		}
+		else{
+			gl::color(pop,pop2,pop);
+		}
+
+		Entry* entry = vpTree->getNearest(census2[i].x, census2[i].y);
+
+		gl::drawLine(Vec2f(census2[i].x * width_, census2[i].y * height_), Vec2f(entry->x * width_, entry->y * height_));
+	}
+}
 
 void HW04marinemrApp::drawMap(){
 
 	for(int i = 0; i < censusSize; i++){
 
-		double pop = (0.5 + ((double)census2[i].population) / 2452.0);
+		double pop = (0.1 + ((double)census2[i].population) / 2452.0);
 		double pop2 = 0;
 
 		if(pop > 1.0){
