@@ -71,7 +71,8 @@ void HW04marinemrApp::update()
 void HW04marinemrApp::draw()
 {
 	// clear out the window with black
-	gl::clear( Color( 0, 0, 0 ) ); 
+	gl::clear( Color( 0, 0, 0 ) );
+
 }
 
 CINDER_APP_BASIC( HW04marinemrApp, RendererGl )
